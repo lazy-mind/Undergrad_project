@@ -10,6 +10,7 @@ class Connect_Four:
 	
 
 class Player:
+	'Descriptor : The general player class, human player and AI player are subclasses of this player class'
 	playerSymbol = 'O'
 	def __init__(self, PlayerSymbol):
 		print 'the new player is created'
@@ -33,9 +34,9 @@ A_Game = Connect_Four()
 A_Game.StartGame()
 A_Game.PrintGameBoard()
 Human_Player = Player('O')
-Human_Player.ShowPlayerType
+Human_Player.ShowPlayerType()
 AI_Player = Player('X')
-AI_Player.ShowPlayerType
+AI_Player.ShowPlayerType()
 
 #print game_board
 
