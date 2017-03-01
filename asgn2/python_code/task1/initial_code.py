@@ -2,17 +2,22 @@ class Player:
     'Descriptor : The general player class, human player and AI player are subclasses of this player class'
     playerSymbol = 'O'
     def __init__(self, PlayerSymbol):
-        print 'the new player is created'
         self.playerSymbol = PlayerSymbol
     def NextColumn(self, gameBoard):
         print 'the next column is shown to choose'
     def ShowPlayerType(self):
         print 'the player is ', self.playerSymbol
 
+class Human(Player):
+    pass
+
+class Computer(Player):
+    pass
 
 class Connect_Four:
     'Descriptor : The connect four playboard'
     row1=row2=row3=row4=row5=row6=[' ',' ',' ',' ',' ',' ',' ']
+    # instance variables
     gameboard = [row1,row2,row3,row4,row5,row6]
     player1 = Player('O')
     player2 = Player('X')
@@ -21,19 +26,30 @@ class Connect_Four:
         print 'a new Connect Four is created'
     def ChoosePlayer(self):
         #choose fist player
-        print 'Please choose the first player:\n1.Computer\n2.Human'
-        input_str=raw_input('Your choice is:')
-        if(input_str[0]=='1'):
-            print 'Player O is Computer'
-        if(input_str[0]=='2'):
-            print 'Player O is Human'
+        while(1):
+            print 'Please choose the first player:\n1.Computer\n2.Human'
+            input_str=raw_input('Your choice is:')
+            if(input_str[0]=='1'):
+                print 'Player O is Computer'
+                break
+            elif(input_str[0]=='2'):
+                print 'Player O is Human'
+                break
+            else:
+                print 'invalid player type!'
+
         #choose seconde player
-        print 'Please choose the second player:\n1.Computer\n2.Human'
-        input_str=raw_input('Your choice is:')
-        if(input_str[0]=='1'):
-            print 'Player X is Computer'
-        if(input_str[0]=='2'):
-            print 'Player X is Human'
+        while(1):
+            print 'Please choose the second player:\n1.Computer\n2.Human'
+            input_str=raw_input('Your choice is:')
+            if(input_str[0]=='1'):
+                print 'Player X is Computer'
+                break
+            elif(input_str[0]=='2'):
+                print 'Player X is Human'
+                break
+            else:
+                print 'invalid player type!'
 
     def StartGame(self):
         print 'this is a new game !'
