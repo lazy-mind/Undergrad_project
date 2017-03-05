@@ -1,3 +1,8 @@
+#from __future__ import print_function
+import sys
+
+#sys.stdout.write('hi')
+
 class Player:
     'Descriptor : The general player class, human player and AI player are subclasses of this player class'
     playerSymbol = 'O'
@@ -27,14 +32,18 @@ class Human(Player):
             else:
                 print ('invalid input string!')
     def NextColumn(self, gameBoard):
-        print ('human thinking')
+        #print ('human thinking')
         self.HumanThinking(gameBoard)
 
 class Computer(Player):
     def ComputerThinking(self,gameBoard):
-        pass
+        for col in range(0,7):
+            if(gameBoard.gameboard[0][col]==' '):
+                gameBoard.UpdateGameBoard(col,self.playerSymbol)
+                break
+
     def NextColumn(self, gameBoard):
-        print ('AI thinking')
+        #print ('AI thinking')
         self.ComputerThinking(gameBoard)
 
 class Connect_Four:
@@ -50,6 +59,9 @@ class Connect_Four:
     player1 = Player('O')
     player2 = Player('X')
     turn = 1
+    win_row=0
+    win_col=0
+    win_set=[]
     def __init__(self):
         print 'a new Connect Four is created'
     def ChoosePlayer(self):
@@ -98,8 +110,15 @@ class Connect_Four:
     def PrintGameBoard(self):
         print '| 1 | 2 | 3 | 4 | 5 | 6 | 7 |'
         print '-----------------------------'
-        for row in self.gameboard:
-            print '| %c | %c | %c | %c | %c | %c | %c |' % (row[0],row[1],row[2],row[3],row[4],row[5],row[6])
+        for idx_row,row in enumerate(self.gameboard):
+            for idx_col,col in enumerate(row):
+                sys.stdout.write('\033[m|')
+                if [idx_row,idx_col] in self.win_set:
+                    sys.stdout.write('\033[7m %c ' % col)
+                else:
+                    sys.stdout.write(' %c ' % col)
+                #print '| %c | %c | %c | %c | %c | %c | %c |' % (row[0],row[1],row[2],row[3],row[4],row[5],row[6])
+            print '\033[m|'
             print '-----------------------------'
 
     def UpdateGameBoard(self,column_index,input_symbol):
@@ -107,11 +126,11 @@ class Connect_Four:
             if (self.gameboard[5-row_index][column_index]==' '):
                 self.gameboard[5-row_index][column_index]=input_symbol
                 break
-        self.PrintGameBoard()
+    
 
     def IsGameOver(self):
         #check row
-        for each_row in self.gameboard:
+        for idx,each_row in enumerate(self.gameboard):
             count=1
             for index in range(1,7):
                 if(each_row[index-1]==' '):
@@ -121,6 +140,11 @@ class Connect_Four:
                 else:
                     count=1
                 if(count==4):
+                    self.win_row=idx
+                    self.win_col=index
+                    for i in range(0,4):
+                        self.win_set.append([self.win_row,self.win_col])
+                        self.win_col=self.win_col-1
                     return 1
         #check column
         for column_index in range(0,7):
@@ -133,6 +157,11 @@ class Connect_Four:
                 else:
                     count=1
                 if(count==4):
+                    self.win_row=row_index
+                    self.win_col=column_index
+                    for i in range(0,4):
+                        self.win_set.append([self.win_row,self.win_col])
+                        self.win_row=self.win_row-1
                     return 1
         #check diagnal:
         for row_num in range(0,3):
@@ -147,6 +176,12 @@ class Connect_Four:
                 else:
                     count=1
                 if(count==4):
+                    self.win_row=row_index
+                    self.win_col=col_index
+                    for i in range(0,4):
+                        self.win_set.append([self.win_row,self.win_col])
+                        self.win_row=self.win_row-1
+                        self.win_col=self.win_col-1
                     return 1
                 row_index=row_index+1
                 col_index=col_index+1
@@ -161,6 +196,12 @@ class Connect_Four:
                 else:
                     count=1
                 if(count==4):
+                    self.win_row=row_index
+                    self.win_col=col_index
+                    for i in range(0,4):
+                        self.win_set.append([self.win_row,self.win_col])
+                        self.win_row=self.win_row-1
+                        self.win_col=self.win_col+1
                     return 1
                 row_index=row_index+1
                 col_index=col_index-1
@@ -176,6 +217,12 @@ class Connect_Four:
                 else:
                     count=1
                 if(count==4):
+                    self.win_row=row_index
+                    self.win_col=col_index
+                    for i in range(0,4):
+                        self.win_set.append([self.win_row,self.win_col])
+                        self.win_row=self.win_row+1
+                        self.win_col=self.win_col-1
                     return 1
                 row_index=row_index-1
                 col_index=col_index+1
@@ -190,11 +237,21 @@ class Connect_Four:
                 else:
                     count=1
                 if(count==4):
+                    self.win_row=row_index
+                    self.win_col=col_index
+                    for i in range(0,4):
+                        self.win_set.append([self.win_row,self.win_col])
+                        self.win_row=self.win_row+1
+                        self.win_col=self.win_col+1
                     return 1
                 row_index=row_index-1
                 col_index=col_index-1
         #check draw:
-        return 0
+        for row in self.gameboard:
+            for col in row:
+                if(col==' '):
+                    return 0
+        return 2
 	
 
 #print Connect_Four.__doc__
@@ -202,15 +259,29 @@ class Connect_Four:
 A_Game = Connect_Four()
 A_Game.StartGame()
 A_Game.PrintGameBoard()
-while(A_Game.IsGameOver()==0):
-    print('next turn')
+gameover_type=0
+while(gameover_type==0):
+    #print('next turn')
     if(A_Game.turn==1):
         #print ('turn is 1')
         A_Game.player1.NextColumn(A_Game)
+        gameover_type=A_Game.IsGameOver()
+        if(gameover_type==1):
+            print ('Player %c wins the game!' % A_Game.player1.playerSymbol)
+        elif(gameover_type==2):
+            print ('It is a draw!')
+        A_Game.PrintGameBoard()
         A_Game.turn=0
     else:
         #print ('turn is 0')
         A_Game.player2.NextColumn(A_Game)
+        gameover_type=A_Game.IsGameOver()
+        if(gameover_type==1):
+            print ('Player %c wins the game!' % A_Game.player2.playerSymbol)
+        elif(gameover_type==2):
+            print ('It is a draw!')
+        A_Game.PrintGameBoard()
         A_Game.turn=1
 print('end of the game')
-
+#print('a',end=)
+#print('b')
