@@ -18,7 +18,7 @@ class Human(Player):
                 column_index=int(input_str)
                 if (column_index>=1 and column_index<=7):
                     if (gameBoard.gameboard[0][column_index-1]==' '):
-                        gameBoard.UpdateGameBoard(column_index-1)
+                        gameBoard.UpdateGameBoard(column_index-1,self.playerSymbol)
                         break;
                     else:
                         print ('invalid input column!')
@@ -39,7 +39,12 @@ class Computer(Player):
 
 class Connect_Four:
     'Descriptor : The connect four playboard'
-    row1=row2=row3=row4=row5=row6=[' ',' ',' ',' ',' ',' ',' ']
+    row1=[' ',' ',' ',' ',' ',' ',' ']
+    row2=[' ',' ',' ',' ',' ',' ',' ']
+    row3=[' ',' ',' ',' ',' ',' ',' ']
+    row4=[' ',' ',' ',' ',' ',' ',' ']
+    row5=[' ',' ',' ',' ',' ',' ',' ']
+    row6=[' ',' ',' ',' ',' ',' ',' ']
     # instance variables
     gameboard = [row1,row2,row3,row4,row5,row6]
     player1 = Player('O')
@@ -96,9 +101,14 @@ class Connect_Four:
         for row in self.gameboard:
             print '| %c | %c | %c | %c | %c | %c | %c |' % (row[0],row[1],row[2],row[3],row[4],row[5],row[6])
             print '-----------------------------'
-    def UpdateGameBoard(self,column_index):
-        print 'I am not updated'
+
+    def UpdateGameBoard(self,column_index,input_symbol):
+        for row_index in range(0,6):
+            if (self.gameboard[5-row_index][column_index]==' '):
+                self.gameboard[5-row_index][column_index]=input_symbol
+                break
         self.PrintGameBoard()
+
     def IsGameOver(self):
         #check row
         for each_row in self.gameboard:
@@ -111,7 +121,6 @@ class Connect_Four:
                 else:
                     count=1
                 if(count==4):
-                    print ('row')
                     return 1
         #check column
         for column_index in range(0,7):
@@ -124,9 +133,67 @@ class Connect_Four:
                 else:
                     count=1
                 if(count==4):
-                    print ('col')
                     return 1
         #check diagnal:
+        for row_num in range(0,3):
+            row_index=row_num+1
+            col_index=1
+            count=1
+            while(row_index!=6):
+                if(self.gameboard[row_index-1][col_index-1]==' '):
+                    count=1
+                elif(self.gameboard[row_index-1][col_index-1]==self.gameboard[row_index][col_index]):
+                    count=count+1
+                else:
+                    count=1
+                if(count==4):
+                    return 1
+                row_index=row_index+1
+                col_index=col_index+1
+            row_index=row_num+1
+            col_index=5
+            count=1
+            while(row_index!=6):
+                if(self.gameboard[row_index-1][col_index+1]==' '):
+                    count=1
+                elif(self.gameboard[row_index-1][col_index+1]==self.gameboard[row_index][col_index]):
+                    count=count+1
+                else:
+                    count=1
+                if(count==4):
+                    return 1
+                row_index=row_index+1
+                col_index=col_index-1
+        for row_num in range(3,6):
+            row_index=row_num-1
+            col_index=1
+            count=1
+            while(row_index!=-1):
+                if(self.gameboard[row_index+1][col_index-1]==' '):
+                    count=1
+                elif(self.gameboard[row_index+1][col_index-1]==self.gameboard[row_index][col_index]):
+                    count=count+1
+                else:
+                    count=1
+                if(count==4):
+                    return 1
+                row_index=row_index-1
+                col_index=col_index+1
+            row_index=row_num-1
+            col_index=5
+            count=1
+            while(row_index!=-1):
+                if(self.gameboard[row_index+1][col_index+1]==' '):
+                    count=1
+                elif(self.gameboard[row_index+1][col_index+1]==self.gameboard[row_index][col_index]):
+                    count=count+1
+                else:
+                    count=1
+                if(count==4):
+                    return 1
+                row_index=row_index-1
+                col_index=col_index-1
+        #check draw:
         return 0
 	
 
