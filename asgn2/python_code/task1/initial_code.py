@@ -1,17 +1,16 @@
 #from __future__ import print_function
 import sys
+from random import randint
 
 #sys.stdout.write('hi')
 
 class Player:
     'Descriptor : The general player class, human player and AI player are subclasses of this player class'
-    playerSymbol = 'O'
     def __init__(self, PlayerSymbol):
         self.playerSymbol = PlayerSymbol
-    def NextColumn(self, gameBoard):
-        print ('here')
-        pass
     # the NextColumn function is to be override by the subclasses
+    def NextColumn(self, gameBoard):
+        pass
     def ShowPlayerType(self):
         print 'the player is ', self.playerSymbol
 
@@ -37,10 +36,10 @@ class Human(Player):
 
 class Computer(Player):
     def ComputerThinking(self,gameBoard):
-        for col in range(0,7):
-            if(gameBoard.gameboard[0][col]==' '):
-                gameBoard.UpdateGameBoard(col,self.playerSymbol)
-                break
+        col=randint(0,6)
+        while(gameBoard.gameboard[0][col]!=' '):
+            col=randint(0,6)
+        gameBoard.UpdateGameBoard(col,self.playerSymbol)
 
     def NextColumn(self, gameBoard):
         #print ('AI thinking')
@@ -63,7 +62,8 @@ class Connect_Four:
     win_col=0
     win_set=[]
     def __init__(self):
-        print 'a new Connect Four is created'
+        pass
+        #print 'A new Connect Four Game is created'
     def ChoosePlayer(self):
         #choose fist player
         while(1):
