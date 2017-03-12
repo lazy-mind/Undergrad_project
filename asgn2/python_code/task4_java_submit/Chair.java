@@ -1,5 +1,4 @@
-package assg2task3;
-
+package assg2task4;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -14,6 +13,10 @@ public class Chair extends DumbFixture {
     protected Boolean seat_back;
     public Chair(String Name, double Weight, int Position, Attendant Person_in_charge, Boolean Seat_back){
         super(Name, Weight, Position, Person_in_charge);
+        this.seat_back = Seat_back;
+    }
+    public Chair(String Name, double Weight, int Position, Robot Robot_in_charge, Boolean Seat_back){
+        super(Name, Weight, Position, Robot_in_charge);
         this.seat_back = Seat_back;
     }
 }

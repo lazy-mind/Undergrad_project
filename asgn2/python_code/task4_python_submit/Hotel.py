@@ -40,10 +40,12 @@ class Robot:
         amount=0.0
         amount = self.MoveTo(Obj)
         if(amount<0):
+            print ('Not enough battery to move!')
             return
         battery_consumed += amount
         amount = self.MoveTo(Destination)
         if(amount<0):
+            print ('Not enough battery to move!')
             return
         battery_consumed += amount
 

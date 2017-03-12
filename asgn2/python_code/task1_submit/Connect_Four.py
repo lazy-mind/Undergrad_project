@@ -1,8 +1,7 @@
-#from __future__ import print_function
 import sys
 from random import randint
 
-#sys.stdout.write('hi')
+
 
 class Player:
     'Descriptor : The general player class, human player and AI player are subclasses of this player class'
@@ -13,6 +12,7 @@ class Player:
         pass
     def ShowPlayerType(self):
         print 'the player is ', self.playerSymbol
+
 
 class Human(Player):
     def HumanThinking(self,gameBoard):
@@ -34,6 +34,7 @@ class Human(Player):
         #print ('human thinking')
         self.HumanThinking(gameBoard)
 
+
 class Computer(Player):
     def ComputerThinking(self,gameBoard):
         col=randint(0,6)
@@ -44,6 +45,84 @@ class Computer(Player):
     def NextColumn(self, gameBoard):
         #print ('AI thinking')
         self.ComputerThinking(gameBoard)
+
+
+class SmartAI(Player):
+    level=0
+    award=[0,0,0,0,0,0,0]
+    
+    opponent_symbol='X'
+    
+    def GetOpponentSymbol(self):
+        if(self.playerSymbol=='X'):
+            self.opponent_symbol='O'
+        else:
+            self.opponent_symbol='X'
+
+    def ClearAward(self):
+        self.award=[0,0,0,0,0,0,0]
+
+    def SmartComputerThinking(self,gameBoard):
+        self.level+=1
+        #self.level define how many turns we will considered for
+        while(self.level<=4):
+            #try for each col
+            for col in range(0,7):
+                if(gameBoard.IsGameOver()==1):
+                    gameBoard.ClearWinSet()
+                    break
+                if(gameBoard.gameboard[0][col]==' '):
+                    # when it is our turn
+                    #if(self.level % 2 == 1):
+                    gameBoard.UpdateGameBoard(col,self.playerSymbol)
+                    if(gameBoard.IsGameOver()==1):
+                        gameBoard.ClearWinSet()
+                        self.award[col]+=105*(1-0.1*(self.level-1))
+                    gameBoard.UndoUpdate(col,self.playerSymbol)
+                    # when it is the opponent turn
+                    #elif(self.level % 2 == 0):
+                    gameBoard.UpdateGameBoard(col,self.opponent_symbol)
+                    if(gameBoard.IsGameOver()==1):
+                        gameBoard.ClearWinSet()
+                        self.award[col]+=100*(1-0.1*(self.level-1))
+                    gameBoard.UndoUpdate(col,self.opponent_symbol)
+            col = self.SmartComputerDecision(gameBoard)
+            gameBoard.UpdateGameBoard(col,self.playerSymbol)
+            self.SmartComputerThinking(gameBoard)
+            gameBoard.UndoUpdate(col,self.playerSymbol)
+            break
+        self.level=0
+    
+    def SmartComputerDecision(self,gameBoard):
+        max=1
+        maxIndex=-1
+        for i in range(0,7):
+            if self.award[i] > max:
+                max = self.award[i]
+                maxIndex = i
+        if(maxIndex==-1):
+            maxIndex=3
+            if(gameBoard.gameboard[0][maxIndex]==' '):
+                return maxIndex
+            else:
+                while(gameBoard.gameboard[0][maxIndex]!=' '):
+                    maxIndex=randint(0,6)
+                return maxIndex
+        if(gameBoard.gameboard[0][maxIndex]==' '):
+            return maxIndex
+        else:
+            while(gameBoard.gameboard[0][maxIndex]!=' '):
+                maxIndex=randint(0,6)
+        return maxIndex
+    
+    def NextColumn(self, gameBoard):
+        self.ClearAward()
+        self.GetOpponentSymbol()
+        self.SmartComputerThinking(gameBoard)
+        col = self.SmartComputerDecision(gameBoard)
+        gameBoard.UpdateGameBoard(col,self.playerSymbol)
+
+
 
 class Connect_Four:
     'Descriptor : The connect four playboard'
@@ -63,7 +142,6 @@ class Connect_Four:
     win_set=[]
     def __init__(self):
         pass
-        #print 'A new Connect Four Game is created'
     def ChoosePlayer(self):
         #choose fist player
         while(1):
@@ -79,12 +157,14 @@ class Connect_Four:
                     self.player1=Human('O')
                     print 'Player O is Human'
                     break
+                elif(input_num==3):
+                    self.player1=SmartAI('O')
+                    print 'Player O is Computer'
+                    break
                 else:
                     print 'invalid player type!'
             else:
                 print 'invalid player type!'
-                
-    
         #choose seconde player
         while(1):
             print 'Please choose the second player:\n1.Computer\n2.Human'
@@ -98,6 +178,10 @@ class Connect_Four:
                 elif(input_num==2):
                     self.player2=Human('X')
                     print 'Player X is Human'
+                    break
+                elif(input_num==3):
+                    self.player2=SmartAI('X')
+                    print 'Player X is Computer'
                     break
                 else:
                     print 'invalid player type!'
@@ -126,7 +210,15 @@ class Connect_Four:
             if (self.gameboard[5-row_index][column_index]==' '):
                 self.gameboard[5-row_index][column_index]=input_symbol
                 break
-    
+
+    def UndoUpdate(self,column_index,input_symbol):
+        for row_index in range(0,6):
+            if (self.gameboard[row_index][column_index]==input_symbol):
+                self.gameboard[row_index][column_index]=' '
+                break
+
+    def ClearWinSet(self):
+        self.win_set=[]
 
     def IsGameOver(self):
         #check row
@@ -254,16 +346,13 @@ class Connect_Four:
         return 2
 	
 
-#print Connect_Four.__doc__
-#create and test Connect_Four class
+
 A_Game = Connect_Four()
 A_Game.StartGame()
 A_Game.PrintGameBoard()
 gameover_type=0
 while(gameover_type==0):
-    #print('next turn')
     if(A_Game.turn==1):
-        #print ('turn is 1')
         A_Game.player1.NextColumn(A_Game)
         gameover_type=A_Game.IsGameOver()
         if(gameover_type==1):
@@ -273,7 +362,6 @@ while(gameover_type==0):
         A_Game.PrintGameBoard()
         A_Game.turn=0
     else:
-        #print ('turn is 0')
         A_Game.player2.NextColumn(A_Game)
         gameover_type=A_Game.IsGameOver()
         if(gameover_type==1):
@@ -282,6 +370,5 @@ while(gameover_type==0):
             print ('It is a draw!')
         A_Game.PrintGameBoard()
         A_Game.turn=1
-print('end of the game')
-#print('a',end=)
-#print('b')
+    print ''
+#print('end of the game')

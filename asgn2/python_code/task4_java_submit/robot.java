@@ -83,15 +83,21 @@ public class Robot{
         
         amount = this.MoveTo(Obj);
         if(amount>0){battery_consumed += amount;}
-        else{return;}
+        else{
+            System.out.println("Not enough battery to move!");
+            return;}
         
         amount = this.MoveTo(Destination);
         if(amount>0){battery_consumed += amount;}
-        else{return;}
+        else{
+            System.out.println("Not enough battery to move!");
+            return;}
         
         amount = this.MoveTo(Destination,Obj);
         if(amount>0){battery_consumed += amount;}
-        else{return;}
+        else{
+            System.out.println("Not enough battery to move!");
+            return;}
         
         System.out.println(this.name + " consumed " + battery_consumed + " battery." );
         return;

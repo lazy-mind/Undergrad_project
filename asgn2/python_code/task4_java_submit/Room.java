@@ -1,5 +1,4 @@
-package assg2task3;
-
+package assg2task4;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -10,14 +9,11 @@ package assg2task3;
  *
  * @author kenchan
  */
-public abstract class Fixture {
+public class Room {
     protected String name;
-    protected double weight;
-    public int position;
-    
-    public Fixture(String Name, double Weight, int Position){
+    protected int position;
+    public Room(String Name, int Position){
         this.name = Name;
-        this.weight = Weight;
         this.position = Position;
     }
     public String GetName(){
@@ -26,9 +22,4 @@ public abstract class Fixture {
     public int GetPosition(){
         return this.position;
     }
-    public double GetWeight(){
-        return this.weight;
-    }
-    public abstract void MoveTo(Room Destination);
 }
-

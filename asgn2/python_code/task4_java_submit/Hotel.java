@@ -19,6 +19,9 @@ public class Hotel {
             else if(obj instanceof Attendant){
                 ((Attendant) obj).MoveTo(Destination);
             }
+            else if(obj instanceof Robot){
+                ((Robot) obj).MoveTo(Destination);
+            }
         }
     }
     
