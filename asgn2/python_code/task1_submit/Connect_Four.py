@@ -1,8 +1,6 @@
 import sys
 from random import randint
 
-
-
 class Player:
     'Descriptor : The general player class, human player and AI player are subclasses of this player class'
     def __init__(self, PlayerSymbol):
@@ -345,7 +343,6 @@ class Connect_Four:
                     return 0
         return 2
 	
-
 
 A_Game = Connect_Four()
 A_Game.StartGame()

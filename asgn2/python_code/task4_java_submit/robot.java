@@ -1,3 +1,21 @@
+/*
+ * CSCI3180 Principles of Programming Languages
+ *
+ * --- Declaration ---
+ *
+ * I declare that the assignment here submitted is original except for source
+ * material explicitly acknowledged. I also acknowledge that I am aware of
+ * University policy and regulations on honesty in academic work, and of the
+ * disciplinary guidelines and procedures applicable to breaches of such policy
+ * and regulations, as contained in the website
+ * http://www.cuhk.edu.hk/policy/academichonesty/
+ *
+ * Assignment 2
+ * Name : Mao Yuxuan
+ * Student ID : 1155062018
+ * Email Addr : yxmao5@cse.cuhk.edu.hk
+ */
+
 package assg2task4;
 
 
@@ -20,13 +38,13 @@ public class Robot{
     public void ChargeBattery(double Amount){
         this.battery_remaining += Amount;
         if(this.battery_remaining > this.battery_capacity){
-            this.battery_remaining = this.battery_capacity
+            this.battery_remaining = this.battery_capacity;
         }
-        ystem.out.println(this.name + " was charged " + Amount + " battery." );
+        System.out.println(this.name + " was charged " + Amount + " battery." );
     }
     public double ConsumeBattery(double Amount){
         if(Amount >= this.battery_remaining){
-            return -1;
+            return -1.0;
         }
         else{
             this.battery_remaining -= Amount;
@@ -46,7 +64,7 @@ public class Robot{
         }
         else{
             System.out.println("Not enough battery to move!");
-            return -1
+            return -1.0;
         }
     }
     public double MoveTo(Fixture Destination){
@@ -59,7 +77,7 @@ public class Robot{
         }
         else{
             System.out.println("Not enough battery to move!");
-            return -1
+            return -1.0;
         }
     }
     public double MoveTo(Room Destination, Fixture Obj){
@@ -72,7 +90,7 @@ public class Robot{
         }
         else{
             System.out.println("Not enough battery to move!");
-            return -1
+            return -1.0;
         }
     }
     
